@@ -17,7 +17,10 @@ export const signUpSchema = yup.object().shape({
     .string()
     .required('You must provide an email.')
     .email('Please provide a valid email.'),
-  username: yup.string().required('Please include your username.'),
+  username: yup
+    .string()
+    .required('Please include your username.')
+    .min(5, 'Your username must be at least 5 chracters long.'),
   password: yup.string().required('You must provide a password.'),
   repeatPassword: yup
     .string()
