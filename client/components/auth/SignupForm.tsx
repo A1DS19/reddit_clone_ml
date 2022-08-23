@@ -3,19 +3,19 @@ import React from 'react';
 import { useFormik } from 'formik';
 import { signUpSchema } from 'validations/authValidations';
 import { AlertMessageAuth } from './AlertMessageAuth';
-import { AuthModalContext, AuthModalContextType } from 'context/authModalContext';
+import { AuthModalContext, AuthModalContextType } from 'context/auth/authModalContext';
+import { SignUpValues } from 'types/auth';
+import { AuthContext, AuthContextType } from 'context/auth/authContext';
+import { signup } from 'context/auth/authRequests';
+import { AlertMessage } from '../common/AlertMessage';
 
 interface SignUpProps {}
 
-interface SignUpValues {
-  email: '';
-  username: '';
-  password: '';
-  repeatPassword: '';
-}
-
 export const SignUpForm: React.FC<SignUpProps> = ({}) => {
-  const { openSelectedModal } = React.useContext(
+  const { clearErrorMessage, errorMessage, setErrorMessage, setUser } = React.useContext(
+    AuthContext
+  ) as AuthContextType;
+  const { openSelectedModal, onClose } = React.useContext(
     AuthModalContext
   ) as AuthModalContextType;
 
@@ -38,14 +38,25 @@ export const SignUpForm: React.FC<SignUpProps> = ({}) => {
   } = useFormik({
     initialValues: initialValues,
     validationSchema: signUpSchema,
-    onSubmit: (values, actions) => {
-      console.log(values);
+    onSubmit: async (values, actions) => {
+      try {
+        actions.setSubmitting(true);
+        const data = await signup(values);
+        setUser(data);
+        clearErrorMessage();
+        onClose();
+      } catch (error: any) {
+        setErrorMessage(error.response.data.message);
+      } finally {
+        actions.setSubmitting(false);
+      }
     },
   });
 
   return (
     <form onSubmit={handleSubmit}>
       <Box width='35%' pb={10}>
+        {!!errorMessage && <AlertMessage type='error' description={errorMessage} />}
         <FormControl pb={3}>
           <Input
             _placeholder={{ fontSize: 'xs', fontWeight: 'semibold' }}
@@ -106,13 +117,14 @@ export const SignUpForm: React.FC<SignUpProps> = ({}) => {
           rounded='full'
           width='full'
           py={2}
+          isLoading={isSubmitting}
           type='submit'
           backgroundColor='blue.600'
           color='white'
           disabled={!isValid || !dirty}
           _hover={{ backgroundColor: 'blue.500' }}
         >
-          Log In
+          Sign Up
         </Button>
         <Text fontSize='sm' mt={5}>
           Already a redditor?{' '}

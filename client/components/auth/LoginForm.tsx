@@ -3,21 +3,23 @@ import React from 'react';
 import { useFormik } from 'formik';
 import { loginSchema } from 'validations/authValidations';
 import { AlertMessageAuth } from './AlertMessageAuth';
-import { AuthModalContext, AuthModalContextType } from 'context/authModalContext';
+import { AuthModalContext, AuthModalContextType } from 'context/auth/authModalContext';
+import { LoginWithUsernameValues } from 'types/auth';
+import { loginWithUsername } from 'context/auth/authRequests';
+import { AuthContext, AuthContextType } from 'context/auth/authContext';
+import { AlertMessage } from '../common/AlertMessage';
 
 interface LoginFormProps {}
 
-interface LoginFormValues {
-  username: string;
-  password: string;
-}
-
 export const LoginForm: React.FC<LoginFormProps> = ({}) => {
-  const { openSelectedModal } = React.useContext(
+  const { setErrorMessage, errorMessage, clearErrorMessage, setUser } = React.useContext(
+    AuthContext
+  ) as AuthContextType;
+  const { openSelectedModal, onClose } = React.useContext(
     AuthModalContext
   ) as AuthModalContextType;
 
-  const initialValues: LoginFormValues = {
+  const initialValues: LoginWithUsernameValues = {
     username: '',
     password: '',
   };
@@ -34,14 +36,25 @@ export const LoginForm: React.FC<LoginFormProps> = ({}) => {
   } = useFormik({
     initialValues: initialValues,
     validationSchema: loginSchema,
-    onSubmit: (values, actions) => {
-      console.log(values);
+    onSubmit: async (values, actions) => {
+      try {
+        actions.setSubmitting(true);
+        const data = await loginWithUsername(values);
+        setUser(data);
+        clearErrorMessage();
+        onClose();
+      } catch (error: any) {
+        setErrorMessage(error.response.data.message);
+      } finally {
+        actions.setSubmitting(false);
+      }
     },
   });
 
   return (
     <form onSubmit={handleSubmit}>
       <Box width='35%' pb={10}>
+        {!!errorMessage && <AlertMessage type='error' description={errorMessage} />}
         <FormControl pb={3}>
           <Input
             _placeholder={{ fontSize: 'xs', fontWeight: 'semibold' }}
@@ -77,6 +90,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({}) => {
           backgroundColor='blue.600'
           color='white'
           disabled={!isValid || !dirty}
+          isLoading={isSubmitting}
           _hover={{ backgroundColor: 'blue.500' }}
         >
           Log In

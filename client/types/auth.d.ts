@@ -4,3 +4,22 @@ export type open_close_modal_type = {
 };
 
 export type modal_type = 'login' | 'signup' | 'reset_password' | 'reset_username' | null;
+
+export interface LoginWithUsernameValues {
+  username: string;
+  password: string;
+}
+
+export interface SignUpValues {
+  email: '';
+  username: '';
+  password: '';
+  repeatPassword: '';
+}
+
+export interface UserResponse {
+  id: number;
+  username: string;
+  isActive: boolean;
+  session_expiration_time: Date;
+}

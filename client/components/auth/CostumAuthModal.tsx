@@ -7,8 +7,8 @@ import {
   ModalOverlay,
   Text,
   Link,
-  ModalFooter,
 } from '@chakra-ui/react';
+import { AuthContext, AuthContextType } from 'context/auth/authContext';
 import React from 'react';
 import { open_close_modal_type } from 'types/auth';
 
@@ -19,6 +19,7 @@ interface CostumAuthModalProps extends open_close_modal_type {
 export const CostumAuthModal: React.FC<
   { children?: React.ReactNode } & CostumAuthModalProps
 > = ({ isOpen, onClose, title, children }) => {
+  const { clearErrorMessage } = React.useContext(AuthContext) as AuthContextType;
   return (
     <Modal
       size='3xl'
@@ -45,7 +46,7 @@ export const CostumAuthModal: React.FC<
             .
           </Text>
         </ModalHeader>
-        <ModalCloseButton fontSize='md' />
+        <ModalCloseButton fontSize='md' onClick={clearErrorMessage} />
         <ModalBody>{children}</ModalBody>
       </ModalContent>
     </Modal>
