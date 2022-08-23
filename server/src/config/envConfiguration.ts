@@ -6,6 +6,7 @@ export interface IEnvConfiguration {
   DB_USERNAME: string;
   DB_PASSWORD: string;
   DB_NAME: string;
+  SESSION_EXPIRATION_TIME: number;
 }
 
 export const envConfiguration = (): IEnvConfiguration => {
@@ -17,5 +18,6 @@ export const envConfiguration = (): IEnvConfiguration => {
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_PORT: parseInt(process.env.DB_PORT),
     DB_USERNAME: process.env.DB_USERNAME,
+    SESSION_EXPIRATION_TIME: parseInt(process.env.SESSION_EXPIRATION_TIME),
   };
 };
