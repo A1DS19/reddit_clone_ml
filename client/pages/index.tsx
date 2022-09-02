@@ -1,11 +1,11 @@
-import { Heading } from '@chakra-ui/react';
+import { PostIndex } from '@/components/posts/PostIndex';
+import { Box, Container } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { Header } from '../components/header/Header';
 
 const Home: NextPage = () => {
   return (
-    <div className='bg-gray-300'>
+    <div>
       <Head>
         <title>Reddit - Dive into anything</title>
         <meta name='description' content='Reddit clone' />
@@ -13,7 +13,13 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <Header />
+        <Container maxW='4xl'>
+          <Box my={5}>
+            {/* <CreatePostSubheader selectedCommunity={selectedCommunity!} /> */}
+          </Box>
+          <Box>{/* <FilterRelevance selectedCommunity={selectedCommunity!} /> */}</Box>
+          <Box my={5}>{/* {posts} */}</Box>
+        </Container>
       </main>
     </div>
   );
