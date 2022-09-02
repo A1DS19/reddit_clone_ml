@@ -5,6 +5,9 @@ import { TypeOrmConfig } from './config/TypeOrmConfig';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { envConfiguration, IEnvConfiguration } from './config/envConfiguration';
 import { UsersModule } from './users/users.module';
+import { PostsModule } from './posts/posts.module';
+import { CommunitiesModule } from './communities/communities.module';
+import { VotesModule } from './votes/votes.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { UsersModule } from './users/users.module';
     }),
     AuthModule,
     UsersModule,
+    PostsModule,
+    CommunitiesModule,
+    VotesModule,
   ],
   controllers: [],
   providers: [],
