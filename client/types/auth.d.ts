@@ -3,7 +3,13 @@ export type open_close_modal_type = {
   isOpen: boolean;
 };
 
-export type modal_type = 'login' | 'signup' | 'reset_password' | 'reset_username' | null;
+export type modal_type =
+  | 'login'
+  | 'signup'
+  | 'reset_password'
+  | 'reset_username'
+  | 'create_community'
+  | null;
 
 export interface LoginWithUsernameValues {
   username: string;
