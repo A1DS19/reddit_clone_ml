@@ -8,7 +8,7 @@ import { UsersService } from 'src/users/users.service';
 import { SignupUserDto } from './dtos/signup.dto';
 import { hash, verify } from 'argon2';
 import { UsernameLoginDto } from './dtos/login.dto';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
 import * as dayjs from 'dayjs';
 import { IEnvConfiguration } from 'src/config/envConfiguration';

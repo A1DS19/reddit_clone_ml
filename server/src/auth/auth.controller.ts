@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { IEnvConfiguration } from 'src/config/envConfiguration';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { UsernameLoginDto } from './dtos/login.dto';
