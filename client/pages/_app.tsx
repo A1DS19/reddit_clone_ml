@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <PostsProvider>
               <EvaluateSessionStatus />
               <Header />
-              <div className='bg-gray-300 h-auto'>
+              <div className='bg-gray-300 h-screen'>
                 <Component {...pageProps} />
               </div>
             </PostsProvider>

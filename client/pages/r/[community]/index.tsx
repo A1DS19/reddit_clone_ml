@@ -21,7 +21,7 @@ interface ServerSideResponse {
 }
 
 const Community: NextPage<ServerSideResponse> = ({ community, posts, errorMessage }) => {
-  const { user } = React.useContext(AuthContext) as AuthContextType;
+  const { user, isAuth } = React.useContext(AuthContext) as AuthContextType;
   const router = useRouter();
   const { posts: postsState, setPosts } = React.useContext(PostsContext) as IPostsContext;
   const { selectedCommunity, setSelectedCommunity } = React.useContext(
@@ -52,7 +52,7 @@ const Community: NextPage<ServerSideResponse> = ({ community, posts, errorMessag
       <Header selectedCommunity={selectedCommunity!} />
       <Container maxW='4xl'>
         <Box my={5}>
-          <CreatePostSubheader selectedCommunity={selectedCommunity!} />
+          {isAuth && <CreatePostSubheader selectedCommunity={selectedCommunity!} />}
         </Box>
         <Box>
           <FilterRelevance selectedCommunity={selectedCommunity!} />
