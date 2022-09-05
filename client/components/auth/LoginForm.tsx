@@ -2,7 +2,7 @@ import { Box, FormControl, Input, Button, Link, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useFormik } from 'formik';
 import { loginSchema } from 'validations/authValidations';
-import { AlertMessageAuth } from './AlertMessageAuth';
+import { AlertMessageForm } from './AlertMessageForm';
 import { AuthModalContext, AuthModalContextType } from 'context/auth/authModalContext';
 import { LoginWithUsernameValues } from 'types/auth';
 import { loginWithUsername } from 'context/auth/authRequests';
@@ -65,7 +65,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({}) => {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <AlertMessageAuth errors={errors} name='username' touched={touched} />
+          <AlertMessageForm errors={errors} name='username' touched={touched} />
         </FormControl>
 
         <FormControl>
@@ -79,7 +79,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({}) => {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <AlertMessageAuth errors={errors} name='password' touched={touched} />
+          <AlertMessageForm errors={errors} name='password' touched={touched} />
         </FormControl>
         <Button
           my={2}

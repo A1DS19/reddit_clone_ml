@@ -2,7 +2,7 @@ import { Box, FormControl, Input, Button, Link, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useFormik } from 'formik';
 import { signUpSchema } from 'validations/authValidations';
-import { AlertMessageAuth } from './AlertMessageAuth';
+import { AlertMessageForm } from './AlertMessageForm';
 import { AuthModalContext, AuthModalContextType } from 'context/auth/authModalContext';
 import { SignUpValues } from 'types/auth';
 import { AuthContext, AuthContextType } from 'context/auth/authContext';
@@ -68,7 +68,7 @@ export const SignUpForm: React.FC<SignUpProps> = ({}) => {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <AlertMessageAuth errors={errors} name='email' touched={touched} />
+          <AlertMessageForm errors={errors} name='email' touched={touched} />
         </FormControl>
 
         <FormControl pb={3}>
@@ -81,7 +81,7 @@ export const SignUpForm: React.FC<SignUpProps> = ({}) => {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <AlertMessageAuth errors={errors} name='username' touched={touched} />
+          <AlertMessageForm errors={errors} name='username' touched={touched} />
         </FormControl>
 
         <FormControl pb={3}>
@@ -95,7 +95,7 @@ export const SignUpForm: React.FC<SignUpProps> = ({}) => {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <AlertMessageAuth errors={errors} name='password' touched={touched} />
+          <AlertMessageForm errors={errors} name='password' touched={touched} />
         </FormControl>
 
         <FormControl>
@@ -109,7 +109,7 @@ export const SignUpForm: React.FC<SignUpProps> = ({}) => {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <AlertMessageAuth errors={errors} name='repeatPassword' touched={touched} />
+          <AlertMessageForm errors={errors} name='repeatPassword' touched={touched} />
         </FormControl>
 
         <Button
