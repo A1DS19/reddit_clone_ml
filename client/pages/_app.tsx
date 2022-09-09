@@ -8,6 +8,7 @@ import { EvaluateSessionStatus } from '@/components/auth/EvaluateSessionStatus';
 import { CommunitiesProvider } from 'context/communities/communitiesContext';
 import { Header } from '@/components/header/Header';
 import { PostsProvider } from 'context/posts/postsContext';
+import { Footer } from '@/components/Footer';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -21,6 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <div className='bg-gray-300 h-screen'>
                 <Component {...pageProps} />
               </div>
+              <Footer />
             </PostsProvider>
           </AuthModalProvider>
         </CommunitiesProvider>
