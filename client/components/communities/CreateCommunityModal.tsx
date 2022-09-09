@@ -37,6 +37,7 @@ import { createCommunity } from 'context/communities/communitiesRequests';
 import { useRouter } from 'next/router';
 import { CommunitiesContext } from 'context/communities/communitiesContext';
 import { AlertMessage } from '../common/AlertMessage';
+import { AuthContext, AuthContextType } from 'context/auth/authContext';
 
 interface CreateCommunityModalProps extends open_close_modal_type {}
 
@@ -50,6 +51,7 @@ export const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   const [communityType, setCommunityType] = React.useState<CommunityRestrictionsTypes>(
     CommunityRestrictions.PUBLIC
   );
+  const { user } = React.useContext(AuthContext) as AuthContextType;
   const initialValues: CreateCommunityValues = {
     name: '',
   };
@@ -77,7 +79,7 @@ export const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
         delete data.members;
         addJoinedCommunity(data);
         onClose();
-        router.push(`/r/${(data as any).slug}`);
+        router.push(`/r/${(data as any).slug}?userId=${user?.id || -1}`);
       } catch (error: any) {
         setErrorMessage(error.response.data.message);
       } finally {

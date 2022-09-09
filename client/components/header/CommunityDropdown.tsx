@@ -33,6 +33,7 @@ import Image from 'next/image';
 import { AuthModalContext, AuthModalContextType } from 'context/auth/authModalContext';
 import { debounce } from 'lodash';
 import {
+  getAllCommunities,
   getCommunityBySlug,
   getJoinedCommunities,
   getJoinedCommunitiesFilter,
@@ -50,6 +51,8 @@ export const CommunityDropdown: React.FC<CommunityDropdownProps> = ({}) => {
     setLoading,
     setErrorMessage,
     setSelectedCommunity,
+    allCommunities,
+    setAllCommunities,
   } = React.useContext(CommunitiesContext) as CommunitiesContext;
   const { openSelectedModal } = React.useContext(
     AuthModalContext
@@ -70,12 +73,38 @@ export const CommunityDropdown: React.FC<CommunityDropdownProps> = ({}) => {
     }
   };
 
+  const fetchAllCommunities = async () => {
+    try {
+      setLoading(true);
+      const data = await getAllCommunities();
+
+      if (joinedCommunities.length === 0) {
+        setAllCommunities(data);
+        return;
+      }
+
+      const filteredData = data.filter((community) => {
+        return !joinedCommunities.some((community2) => {
+          return community.id == community2.id;
+        });
+      });
+
+      setAllCommunities(filteredData);
+    } catch (error: any) {
+      setErrorMessage(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchSelectedCommunity = async () => {
-    const selectedCommunity = localStorage.getItem('selectedCommunity');
-    if (selectedCommunity) {
+    const selectedCommunity = localStorage.getItem('selectedCommunity')
+      ? JSON.parse(localStorage.getItem('selectedCommunity') || '')
+      : '';
+    if (selectedCommunity !== '') {
       try {
         const data = await getCommunityBySlug(
-          localStorage.getItem('selectedCommunity') as string,
+          selectedCommunity?.slug,
           user?.id.toString()!
         );
         setSelectedCommunity(data);
@@ -87,19 +116,25 @@ export const CommunityDropdown: React.FC<CommunityDropdownProps> = ({}) => {
 
   React.useEffect(() => {
     (async () => {
-      await fetchSelectedCommunity();
-    })();
-  }, [selectedCommunity?.name]);
-
-  React.useEffect(() => {
-    async () => {
       await fetchJoinedCommunities();
-    };
+    })();
 
     return () => {
       setErrorMessage(null);
     };
   }, []);
+
+  React.useEffect(() => {
+    (async () => {
+      await fetchAllCommunities();
+    })();
+  }, [joinedCommunities]);
+
+  React.useEffect(() => {
+    (async () => {
+      await fetchSelectedCommunity();
+    })();
+  }, [selectedCommunity?.name]);
 
   React.useEffect(() => {
     (async () => {
@@ -200,12 +235,53 @@ export const CommunityDropdown: React.FC<CommunityDropdownProps> = ({}) => {
     );
   };
 
+  const renderRandomCommunities = () => {
+    return (
+      <React.Fragment>
+        {!loading ? (
+          <Box maxH='60' overflowY='scroll'>
+            {allCommunities.map((community) => (
+              <Link
+                key={community.id}
+                href={`/r/${community.slug}?userId=${user?.id}`}
+                passHref
+              >
+                <a target='_self'>
+                  <MenuItem
+                    icon={
+                      !!community.profile_pic_url ? (
+                        <Image
+                          src={community.profile_pic_url}
+                          alt={`${community.name} profile picture`}
+                        />
+                      ) : (
+                        <MdPeopleAlt size={25} />
+                      )
+                    }
+                  >
+                    {community.name}
+                  </MenuItem>
+                </a>
+              </Link>
+            ))}
+          </Box>
+        ) : (
+          <MenuItem>
+            <Spinner />
+          </MenuItem>
+        )}
+      </React.Fragment>
+    );
+  };
+
   const renderFeeds = () => {
     return (
       <React.Fragment>
-        <MenuItem icon={<AiOutlineHome fontSize={25} />} fontSize='sm'>
-          Home
-        </MenuItem>
+        <Link href='/'>
+          <MenuItem icon={<AiOutlineHome fontSize={25} />} fontSize='sm'>
+            Home
+          </MenuItem>
+        </Link>
         <MenuItem icon={<BsArrowUpRightCircle fontSize={25} />} fontSize='sm'>
           Popular
         </MenuItem>
@@ -282,6 +358,10 @@ export const CommunityDropdown: React.FC<CommunityDropdownProps> = ({}) => {
               YOUR COMMUNITIES
             </Text>
             {renderMyCommunities()}
+            <Text my={3} color='gray' ml={4} fontSize={10} fontWeight={500}>
+              COMMUNITIES YOU MIGTH LIKE
+            </Text>
+            {renderRandomCommunities()}
             <Text my={3} color='gray' ml={4} fontSize={10} fontWeight={500}>
               FEEDS
             </Text>
