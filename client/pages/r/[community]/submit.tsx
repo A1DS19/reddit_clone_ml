@@ -1,4 +1,3 @@
-import { NonSSRPage } from '@/components/common/NonSSRPage';
 import NonSSRWrapper from '@/components/common/NonSSRWrapper';
 import { CreatePostTab } from '@/components/posts/create/CreatePostTab';
 import { Header } from '@/components/posts/create/Header';
@@ -43,4 +42,4 @@ const Create: NextPage = () => {
   );
 };
 
-export default NonSSRPage(Create);
+export default Create;

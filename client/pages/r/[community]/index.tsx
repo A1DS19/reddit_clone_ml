@@ -41,7 +41,7 @@ const Community: NextPage<ServerSideResponse> = ({ community, posts, errorMessag
   React.useEffect(() => {
     setSelectedCommunity(community);
     setPosts(posts);
-  }, [community, setSelectedCommunity, posts, setPosts]);
+  }, [community, posts]);
 
   if (errorMessage) {
     return <div>{errorMessage}</div>;
@@ -49,7 +49,7 @@ const Community: NextPage<ServerSideResponse> = ({ community, posts, errorMessag
 
   return (
     <React.Fragment>
-      <Header selectedCommunity={selectedCommunity!} />
+      <Header selectedCommunity={selectedCommunity!} isFromList={true} />
       <Container maxW='4xl'>
         <Box my={5}>
           {isAuth && <CreatePostSubheader selectedCommunity={selectedCommunity!} />}
