@@ -4,7 +4,9 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
+  Put,
   Query,
   UseGuards,
   UseInterceptors,
@@ -35,7 +37,7 @@ export class CommunitiesController {
     @Param('slug') slug: string,
     @Query('userId') userId: number,
   ): Promise<Community> {
-    return await this.communityService.getCommunityBySlug(slug, userId);
+    return await this.communityService.getCommunityBySlug(slug);
   }
 
   @Get('/joined-communities')
@@ -54,5 +56,24 @@ export class CommunitiesController {
       user,
       communityName,
     );
+  }
+
+  @Patch('/leave-community/:communityId')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async leaveJoinCommunityById(
+    @Param('communityId') communityId: number,
+    @CurrentUser() user: User,
+  ): Promise<User[]> {
+    return await this.communityService.leaveJoinCommunityById(
+      communityId,
+      user,
+    );
+  }
+
+  @Get('/random-communities')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getRandomCommunities(): Promise<Community[]> {
+    return await this.communityService.getRandomCommunities();
   }
 }
