@@ -118,7 +118,7 @@ export const RenderComments: React.FC<RenderCommentsProps> = ({ post }) => {
   return (
     <React.Fragment>
       {post.comments.length > 0 && (
-        <Box p={3} borderRadius='md' bgColor='white' maxH={350} overflowY='scroll'>
+        <Box p={3} borderRadius='md' bgColor='white' maxH={200} overflowY='scroll'>
           {renderComments()}
         </Box>
       )}

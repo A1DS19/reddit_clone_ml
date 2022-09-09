@@ -19,7 +19,7 @@ export const PostList: React.FC<PostListProps> = ({ posts }) => {
   };
 
   return (
-    <Box overflowY='scroll' maxH='70vh'>
+    <Box overflowY='scroll' maxH='80vh'>
       {renderCommunityPosts()}
     </Box>
   );

@@ -61,7 +61,7 @@ export const SelectedPostIndex: React.FC<SelectedPostIndexProps> = ({ post }) =>
           </NonSSRWrapper>
         </Box>
 
-        <Box mt={5}>
+        <Box my={5}>
           <RenderComments post={post} />
         </Box>
       </Container>
