@@ -30,6 +30,12 @@ export class PostsController {
     return await this.postsService.createPost(body, user);
   }
 
+  @Get('/get-all?')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getAllPosts(@Query('userId') userId: number): Promise<PostEntity[]> {
+    return await this.postsService.getAllPostsHome(userId);
+  }
+
   @Get('/:slug?')
   @UseInterceptors(ClassSerializerInterceptor)
   async getAllPostsByCommunitySlug(
@@ -47,5 +53,14 @@ export class PostsController {
     @CurrentUser() user: User,
   ): Promise<PostEntity> {
     return await this.postsService.getPostById(postId, user);
+  }
+
+  @Get('/get-by-slug/:slug?')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getPostBySlug(
+    @Param('slug') slug: string,
+    @Query('userId') userId: number,
+  ): Promise<PostEntity> {
+    return await this.postsService.getPostBySlug(slug, userId);
   }
 }
