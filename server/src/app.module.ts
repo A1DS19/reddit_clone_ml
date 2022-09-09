@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { CommunitiesModule } from './communities/communities.module';
 import { VotesModule } from './votes/votes.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { VotesModule } from './votes/votes.module';
     PostsModule,
     CommunitiesModule,
     VotesModule,
+    CommentsModule,
   ],
   controllers: [],
   providers: [],
