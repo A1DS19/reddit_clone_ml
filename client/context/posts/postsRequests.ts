@@ -12,6 +12,13 @@ export const getAllPostsByCommunitySlug = async (
   return data;
 };
 
+export const getAllPostsHome = async (userId: string): Promise<PostResponse[]> => {
+  const { data } = await axiosInstance.get(`/posts/get-all?userId=${userId}`, {
+    withCredentials: true,
+  });
+  return data;
+};
+
 export const getPostById = async (postId: number): Promise<PostResponse> => {
   const { data } = await axiosInstance.get(`/posts/get-by-id/${postId}`, {
     withCredentials: true,
@@ -43,6 +50,26 @@ export const createPost = async (
   const { data } = await axiosInstance.post(
     '/posts/create',
     { ...body, communityId },
+    { withCredentials: true }
+  );
+  return data;
+};
+
+export const getPostBySlug = async (
+  slug: string,
+  userId: string
+): Promise<PostResponse> => {
+  const { data } = await axiosInstance.get(
+    `/posts/get-by-slug/${slug}?userId=${userId}`,
+    { withCredentials: true }
+  );
+  return data;
+};
+
+export const createComment = async (body: string, postId: number) => {
+  const { data } = await axiosInstance.post(
+    `/comments/create?postId=${postId}`,
+    { body },
     { withCredentials: true }
   );
   return data;

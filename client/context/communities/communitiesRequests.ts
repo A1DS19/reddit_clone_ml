@@ -13,6 +13,13 @@ export const getJoinedCommunities = async (): Promise<JoinedCommunities[]> => {
   return data;
 };
 
+export const getAllCommunities = async (): Promise<JoinedCommunities[]> => {
+  const { data } = await axiosInstance.get('/communities/random-communities', {
+    withCredentials: true,
+  });
+  return data;
+};
+
 export const getJoinedCommunitiesFilter = async (
   communityName: string
 ): Promise<JoinedCommunities[]> => {
@@ -44,5 +51,18 @@ export const getCommunityBySlug = async (
       withCredentials: true,
     }
   );
+  return data;
+};
+
+export const leaveJoinCommunity = async (
+  communityId: number
+): Promise<CommunityResponse> => {
+  const { data } = await axiosInstance.patch(
+    `/communities/leave-community/${communityId}`,
+    {
+      withCredentials: true,
+    }
+  );
+
   return data;
 };

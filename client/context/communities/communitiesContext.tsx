@@ -8,10 +8,15 @@ export interface CommunitiesContext {
   joinedCommunities: JoinedCommunities[];
   setJoinedCommunities: (joinedCommunities: JoinedCommunities[]) => void;
   selectedCommunity: CommunityResponse | null;
-  setSelectedCommunity: (community: CommunityResponse) => void;
+  setSelectedCommunity: (community: CommunityResponse | null) => void;
   loading: boolean;
   setLoading: (state: boolean) => void;
   addJoinedCommunity: (newCommunity: JoinedCommunities) => void;
+  setSelectedCommunityState: React.Dispatch<
+    React.SetStateAction<CommunityResponse | null>
+  >;
+  allCommunities: JoinedCommunities[];
+  setAllCommunities: (joinedCommunities: JoinedCommunities[]) => void;
 }
 
 export const CommunitiesContext = React.createContext<CommunitiesContext | false>(false);
@@ -20,14 +25,19 @@ export const CommunitiesProvider: ReactFCWithChildren = ({ children }) => {
   const [joinedCommunities, setJoinedCommunities] = React.useState<JoinedCommunities[]>(
     []
   );
+  const [allCommunities, setAllCommunities] = React.useState<JoinedCommunities[]>([]);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [selectedCommunity, setSelectedCommunityState] =
     React.useState<CommunityResponse | null>(null);
   const [loading, setLoading] = React.useState(false);
 
-  const setSelectedCommunity = (community: CommunityResponse) => {
+  const setSelectedCommunity = (community: CommunityResponse | null) => {
+    localStorage.removeItem('selectedCommunity');
     setSelectedCommunityState(community);
-    localStorage.setItem('selectedCommunity', community?.slug.toString());
+
+    if (community !== null) {
+      localStorage.setItem('selectedCommunity', JSON.stringify(community));
+    }
   };
 
   const addJoinedCommunity = (newCommunity: JoinedCommunities) =>
@@ -43,6 +53,9 @@ export const CommunitiesProvider: ReactFCWithChildren = ({ children }) => {
     setJoinedCommunities,
     addJoinedCommunity,
     setLoading,
+    setSelectedCommunityState,
+    allCommunities,
+    setAllCommunities,
   };
 
   return (
