@@ -38,7 +38,7 @@ export class Vote {
   @Exclude()
   commentId: number;
 
-  @ManyToOne(() => Post, (post) => post.votes)
+  @ManyToOne(() => Post, (post) => post.votes, { onDelete: 'CASCADE' })
   post: Vote;
 
   @ManyToOne(() => Reply, (reply) => reply.votes)

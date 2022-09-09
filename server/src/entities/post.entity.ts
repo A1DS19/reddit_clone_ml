@@ -23,6 +23,9 @@ export class Post {
   @Column()
   title: string;
 
+  @Column()
+  slug: string;
+
   @Column({ nullable: true })
   body: string;
 

@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -20,6 +21,14 @@ export class Comment {
 
   @Column()
   body: string;
+
+  @Column()
+  @Exclude()
+  userId: number;
+
+  @Column()
+  @Exclude()
+  postId: number;
 
   @Column({ type: 'enum', enum: IsActive, default: IsActive.ACTIVE })
   isActive: IsActive;
