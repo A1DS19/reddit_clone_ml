@@ -18,13 +18,9 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { BsViewStacked } from 'react-icons/bs';
 import { ImStack } from 'react-icons/im';
 
-interface FilterRelevanceProps {
-  selectedCommunity: CommunityResponse;
-}
+interface FilterRelevanceProps {}
 
-export const FilterRelevance: React.FC<FilterRelevanceProps> = ({
-  selectedCommunity,
-}) => {
+export const FilterRelevance: React.FC<FilterRelevanceProps> = ({}) => {
   return (
     <Flex bgColor='white' borderRadius='md' padding={2} fontWeight='bold' color='gray'>
       <Flex

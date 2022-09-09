@@ -13,6 +13,9 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { AuthContext, AuthContextType } from 'context/auth/authContext';
+import { AuthModalContext, AuthModalContextType } from 'context/auth/authModalContext';
+import { CommunitiesContext } from 'context/communities/communitiesContext';
+import { leaveJoinCommunity } from 'context/communities/communitiesRequests';
 import Image from 'next/image';
 import React from 'react';
 import { AiOutlineBell } from 'react-icons/ai';
@@ -22,13 +25,38 @@ import { CommunityResponse } from 'types/communities';
 
 interface HeaderProps {
   selectedCommunity: CommunityResponse;
+  isFromList: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ selectedCommunity }) => {
-  const { user } = React.useContext(AuthContext) as AuthContextType;
+export const Header: React.FC<HeaderProps> = ({ selectedCommunity, isFromList }) => {
+  const { user, isAuth } = React.useContext(AuthContext) as AuthContextType;
+  const { setSelectedCommunity, loading, setLoading } = React.useContext(
+    CommunitiesContext
+  ) as CommunitiesContext;
+  const { openSelectedModal } = React.useContext(
+    AuthModalContext
+  ) as AuthModalContextType;
   const isUserMember = selectedCommunity?.members?.find(
     (member) => member.id === user?.id
   );
+
+  const leaveJoin = async () => {
+    if (!isAuth) {
+      openSelectedModal('login');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const data = await leaveJoinCommunity(selectedCommunity?.id);
+      const newData = { ...selectedCommunity, members: data };
+      setSelectedCommunity(newData as any);
+    } catch (error: any) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -63,50 +91,54 @@ export const Header: React.FC<HeaderProps> = ({ selectedCommunity }) => {
             </Text>
           </Box>
 
-          <Stack ml={5} direction='row' alignItems='center'>
-            <Button
-              variant='outline'
-              color='blue.500'
-              borderRadius='full'
-              borderColor='blue.500'
-              _hover={{ bgColor: 'gray.300' }}
-            >
-              {isUserMember ? 'Joined' : 'Join'}
-            </Button>
-            {isUserMember && (
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  borderColor='blue.500'
-                  variant='outline'
-                  rounded='full'
-                  padding='0'
-                >
-                  <BsFillBellFill
-                    fontSize='20'
-                    color='#3182ce'
-                    style={{ marginLeft: 8 }}
-                  />
-                </MenuButton>
-                <MenuList color='gray' fontWeight='bold' fontSize='sm'>
-                  <MenuItem>
-                    <TbBellRinging fontSize={25} />
-                    <Text ml={1}>Frequent</Text>
-                  </MenuItem>
-                  <MenuDivider />
-                  <MenuItem>
-                    <AiOutlineBell fontSize={25} />
-                    <Text ml={1}>Low</Text>
-                  </MenuItem>
-                  <MenuDivider />
-                  <MenuItem>
-                    <BsBellSlash fontSize={25} />
-                    <Text ml={1}>Off</Text>
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            )}
-          </Stack>
+          {isFromList && (
+            <Stack ml={5} direction='row' alignItems='center'>
+              <Button
+                variant='outline'
+                color='blue.500'
+                borderRadius='full'
+                borderColor='blue.500'
+                _hover={{ bgColor: 'gray.300' }}
+                onClick={leaveJoin}
+                isLoading={loading}
+              >
+                {isUserMember ? 'Joined' : 'Join'}
+              </Button>
+              {isUserMember && (
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    borderColor='blue.500'
+                    variant='outline'
+                    rounded='full'
+                    padding='0'
+                  >
+                    <BsFillBellFill
+                      fontSize='20'
+                      color='#3182ce'
+                      style={{ marginLeft: 8 }}
+                    />
+                  </MenuButton>
+                  <MenuList color='gray' fontWeight='bold' fontSize='sm'>
+                    <MenuItem>
+                      <TbBellRinging fontSize={25} />
+                      <Text ml={1}>Frequent</Text>
+                    </MenuItem>
+                    <MenuDivider />
+                    <MenuItem>
+                      <AiOutlineBell fontSize={25} />
+                      <Text ml={1}>Low</Text>
+                    </MenuItem>
+                    <MenuDivider />
+                    <MenuItem>
+                      <BsBellSlash fontSize={25} />
+                      <Text ml={1}>Off</Text>
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              )}
+            </Stack>
+          )}
         </Flex>
       </Box>
     </React.Fragment>

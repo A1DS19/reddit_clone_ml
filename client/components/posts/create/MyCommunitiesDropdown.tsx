@@ -119,7 +119,9 @@ export const MyCommunitiesDropdown: React.FC<MyCommunitiesDropdownProps> = ({
             _expanded={{ bgColor: 'white' }}
             borderRadius='md'
           >
-            r/{selectedCommunity?.name}
+            {selectedCommunity
+              ? `r/${selectedCommunity?.name}`
+              : 'Open to create community'}
           </MenuButton>
           <MenuList width='100%'>{renderMyCommunities()}</MenuList>
         </React.Fragment>

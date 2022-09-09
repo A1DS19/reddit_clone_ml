@@ -5,14 +5,14 @@ import { PostResponse } from 'types/posts';
 import { PostList } from './PostList';
 
 interface PostIndexProps {
-  selectedCommunity: CommunityResponse;
+  selectedCommunity?: CommunityResponse;
   posts: PostResponse[];
 }
 
-export const PostIndex: React.FC<PostIndexProps> = ({ selectedCommunity, posts }) => {
+export const PostIndex: React.FC<PostIndexProps> = ({ posts }) => {
   return (
     <Box>
-      <PostList selectedCommunity={selectedCommunity} posts={posts} />
+      <PostList posts={posts} />
     </Box>
   );
 };

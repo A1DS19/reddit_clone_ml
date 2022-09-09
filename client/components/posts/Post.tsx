@@ -3,7 +3,6 @@ import {
   Flex,
   Heading,
   Text,
-  Button,
   Menu,
   MenuButton,
   MenuItem,
@@ -21,7 +20,6 @@ import React from 'react';
 import testImage from '../../public/reddit_512x512.png';
 import { PostResponse } from 'types/posts';
 import { AuthContext, AuthContextType } from 'context/auth/authContext';
-import { CommunityResponse } from 'types/communities';
 import {
   getPostById,
   getVoteCountForPostId,
@@ -31,26 +29,30 @@ import { formatDistance } from 'date-fns';
 import { IPostsContext, PostsContext } from 'context/posts/postsContext';
 import { AuthModalContext, AuthModalContextType } from 'context/auth/authModalContext';
 import { VoteType } from 'types/votes.d';
-import Link from 'next/link';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
+import { CommunitiesContext } from 'context/communities/communitiesContext';
+import { useRouter } from 'next/router';
 
 interface PostProps {
   post: PostResponse;
-  selectedCommunity: CommunityResponse;
+  isFromList: boolean;
 }
 
-export const Post: React.FC<PostProps> = ({ post, selectedCommunity }) => {
+export const Post: React.FC<PostProps> = ({ post, isFromList }) => {
   const [voteCount, setVoteCount] = React.useState(0);
   const { setPosts } = React.useContext(PostsContext) as IPostsContext;
   const { user, isAuth } = React.useContext(AuthContext) as AuthContextType;
+  const { loading, setLoading, setSelectedCommunity, selectedCommunity } =
+    React.useContext(CommunitiesContext) as CommunitiesContext;
   const { openSelectedModal } = React.useContext(
     AuthModalContext
   ) as AuthModalContextType;
   const isUserMember = selectedCommunity?.members?.find(
     (member) => member.id === user?.id
   );
-  const userVote = post.votes[0];
+  const userVote = post?.votes[0];
+  const router = useRouter();
 
   React.useEffect(() => {
     (async () => {
@@ -59,7 +61,7 @@ export const Post: React.FC<PostProps> = ({ post, selectedCommunity }) => {
         setVoteCount(voteCount);
       } catch (err) {}
     })();
-  }, [post.id]);
+  }, [post?.id]);
 
   const updatePostVote = async (value: number) => {
     if (!isAuth) {
@@ -126,33 +128,25 @@ export const Post: React.FC<PostProps> = ({ post, selectedCommunity }) => {
       <Box bgColor='white' padding={2} w='full'>
         <Flex alignItems={'center'}>
           <NextImage src={testImage} width={20} height={20} alt='comunity image' />
-          <Link href={`${selectedCommunity?.name}?userId=${user?.id || -1}`}>
-            <Text cursor='pointer' mx={2} fontWeight='black'>
-              r/{selectedCommunity?.name}
-            </Text>
-          </Link>
+          <Text
+            onClick={
+              isFromList
+                ? () => router.push(`/r/${post.community?.slug}?userId=${user?.id || -1}`)
+                : () => {}
+            }
+            cursor={isFromList ? 'pointer' : 'default'}
+            mx={2}
+            fontWeight='black'
+          >
+            r/{post?.community?.name}
+          </Text>
           <Text fontSize='xs' fontWeight='light'>
             {`Posted by: u/${post?.user.username} ${formatDistance(
-              new Date(post.createdAt),
+              new Date(post?.createdAt),
               new Date(),
               { addSuffix: true }
             )}`}
           </Text>
-          {!isUserMember && (
-            <Button
-              size='xs'
-              bgColor='blue.500'
-              color='white'
-              borderRadius='full'
-              alignSelf='flex-end'
-              marginLeft='auto'
-              px={4}
-              py={1}
-              _hover={{ bgColor: 'blue.400' }}
-            >
-              Join
-            </Button>
-          )}
         </Flex>
 
         <Box mx={2} mt={2}>
@@ -161,7 +155,7 @@ export const Post: React.FC<PostProps> = ({ post, selectedCommunity }) => {
           </Heading>
           <Text> {post?.body} </Text>
 
-          {post.imagesUrl && (
+          {post?.imagesUrl && (
             <Carousel
               showArrows={true}
               autoPlay
@@ -171,7 +165,7 @@ export const Post: React.FC<PostProps> = ({ post, selectedCommunity }) => {
               infiniteLoop
               interval={4000}
             >
-              {post.imagesUrl.map((image) => (
+              {post?.imagesUrl.map((image) => (
                 <Box key={image}>
                   <Image src={image} alt='image' width={400} height={400} />
                 </Box>
@@ -192,9 +186,16 @@ export const Post: React.FC<PostProps> = ({ post, selectedCommunity }) => {
       <Box>
         <Flex fontSize='xl' fontWeight='bold' color='gray'>
           <Flex
+            onClick={
+              isFromList
+                ? () =>
+                    router.push(
+                      `/r/${post?.community?.slug}/${post?.slug}?userId=${user?.id || -1}`
+                    )
+                : () => {}
+            }
             mx={1}
-            padding={1.5}
-            cursor='pointer'
+            cursor={isFromList ? 'pointer' : 'default'}
             _hover={{ bgColor: 'blackAlpha.100' }}
             borderRadius='md'
             alignItems='center'
@@ -270,13 +271,14 @@ export const Post: React.FC<PostProps> = ({ post, selectedCommunity }) => {
       </Box>
     );
   };
-
   return (
-    <Box mb={4} border='GrayText' borderColor={'gray'} borderRadius='md'>
-      <Flex>
-        {renderLikes()}
-        {renderContent()}
-      </Flex>
-    </Box>
+    <React.Fragment>
+      <Box mb={4} border='GrayText' borderColor={'gray'} borderRadius='md'>
+        <Flex>
+          {isFromList && renderLikes()}
+          {renderContent()}
+        </Flex>
+      </Box>
+    </React.Fragment>
   );
 };

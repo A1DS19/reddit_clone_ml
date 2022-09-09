@@ -1,22 +1,20 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
-import { CommunityResponse } from 'types/communities';
 import { PostResponse } from 'types/posts';
 import { Post } from './Post';
 
 interface PostListProps {
-  selectedCommunity: CommunityResponse;
   posts: PostResponse[];
 }
 
-export const PostList: React.FC<PostListProps> = ({ selectedCommunity, posts }) => {
-  const renderCommunityPosts = () => {
-    if (posts?.length === 0) {
-      return <React.Fragment></React.Fragment>;
-    }
+export const PostList: React.FC<PostListProps> = ({ posts }) => {
+  if (!posts) {
+    return <React.Fragment></React.Fragment>;
+  }
 
+  const renderCommunityPosts = () => {
     return posts?.map((post) => {
-      return <Post key={post.id} post={post} selectedCommunity={selectedCommunity} />;
+      return <Post key={post.id} post={post} isFromList={true} />;
     });
   };
 

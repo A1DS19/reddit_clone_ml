@@ -9,7 +9,7 @@ import { BsLink45Deg } from 'react-icons/bs';
 import { CommunityResponse } from 'types/communities';
 
 interface CreatePostSubheaderProps {
-  selectedCommunity: CommunityResponse;
+  selectedCommunity: CommunityResponse | null;
 }
 
 export const CreatePostSubheader: React.FC<CreatePostSubheaderProps> = ({
@@ -28,7 +28,7 @@ export const CreatePostSubheader: React.FC<CreatePostSubheaderProps> = ({
               selectedCommunity?.profile_pic_url ||
               'https://res.cloudinary.com/ai1ds/image/upload/v1661826022/redditpfp_kw0g4g.png'
             }
-            alt={`${selectedCommunity?.name} picture`}
+            alt={`${selectedCommunity?.name || 'home'} picture`}
             width={60}
             height={60}
           />
@@ -37,16 +37,16 @@ export const CreatePostSubheader: React.FC<CreatePostSubheaderProps> = ({
       <Input
         placeholder='Create Post'
         bgColor='blackAlpha.100'
-        onClick={() => router.push(`/r/${selectedCommunity.name}/submit`)}
+        onClick={() => router.push(`/r/${selectedCommunity?.name || 'home'}/submit`)}
       />
       <Stack direction='row' fontSize={25} color='gray' mx={3}>
-        <Link href={`/r/${selectedCommunity?.slug}/submit?media=true`}>
+        <Link href={`/r/${selectedCommunity?.slug || 'home'}/submit?media=true`}>
           <Box cursor='pointer'>
             <AiOutlinePicture />
           </Box>
         </Link>
 
-        <Link href={`/r/${selectedCommunity?.slug}/submit?url`}>
+        <Link href={`/r/${selectedCommunity?.slug || 'home'}/submit?url`}>
           <Box cursor='pointer'>
             <BsLink45Deg />
           </Box>

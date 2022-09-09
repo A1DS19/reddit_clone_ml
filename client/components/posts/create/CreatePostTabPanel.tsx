@@ -73,7 +73,7 @@ export const CreatePostTabPanel: React.FC<CreatePostTabPanelProps> = ({}) => {
       <Box mb={5}>
         {!!errorMessage && <AlertMessage type='error' description={errorMessage} />}
         {!selectedCommunity && (
-          <AlertMessage type='error' description='Please select a community' />
+          <AlertMessage type='error' description='Please select or create a community' />
         )}
       </Box>
       <FormControl>
