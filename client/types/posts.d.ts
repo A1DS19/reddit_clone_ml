@@ -1,5 +1,6 @@
 import { UserResponse } from './auth';
-import { IsActiveType } from './communities';
+import { IComments } from './comments';
+import { CommunityResponse, IsActiveType } from './communities';
 import { IVote } from './votes';
 
 export interface PostResponse {
@@ -13,4 +14,7 @@ export interface PostResponse {
   updatedAt: string;
   commentCount: number;
   votes: IVote[];
+  slug: string;
+  community: CommunityResponse;
+  comments: IComments[];
 }

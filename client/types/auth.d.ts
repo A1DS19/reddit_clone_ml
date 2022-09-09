@@ -9,6 +9,7 @@ export type modal_type =
   | 'reset_password'
   | 'reset_username'
   | 'create_community'
+  | 'post-modal'
   | null;
 
 export interface LoginWithUsernameValues {
