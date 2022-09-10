@@ -26,7 +26,8 @@
     "react-icons": "^4.4.0",
     "react-responsive-carousel": "^3.2.23",
     "universal-cookie": "^4.0.4",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "yup-password": "^0.2.2"
   },
   "devDependencies": {
     "@types/node": "18.7.5",
