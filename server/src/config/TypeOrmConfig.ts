@@ -29,10 +29,10 @@ export class TypeOrmConfig {
       url: process.env.DATABASE_URL,
       entities: ['dist/entities/**/*.entity.js'],
       migrations: ['dist/migrations/**/*.js'],
-      synchronize: true,
+      synchronize: false,
       logging: 'all',
       logger: 'advanced-console',
-      migrationsRun: false,
+      migrationsRun: true,
       ssl: {
         rejectUnauthorized: false,
       },
