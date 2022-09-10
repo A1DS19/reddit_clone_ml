@@ -17,7 +17,7 @@ async function bootstrap() {
       name: 'auth-session',
       keys: [process.env.COOKIE_KEYS],
       maxAge: parseInt(process.env.SESSION_EXPIRATION_TIME),
-      secure: process.env.NODE_ENV === 'development' ? false : true,
+      secure: process.env.NODE_ENV === 'development' ? false : false,
       httpOnly: false,
     }),
   );
