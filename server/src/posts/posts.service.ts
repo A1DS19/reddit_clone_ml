@@ -18,7 +18,8 @@ export class PostsService {
     const slug = title
       .split(' ')
       .map((word) => word.toLowerCase())
-      .join('_');
+      .join('_')
+      .replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
 
     const post = await this.postsRepository.create({
       title,
