@@ -18,11 +18,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           <AuthModalProvider>
             <PostsProvider>
               <EvaluateSessionStatus />
-              <Header />
-              <div className='bg-gray-300 h-max'>
+              <header>
+                <Header />
+              </header>
+              <div className='bg-gray-300 min-h-screen'>
                 <Component {...pageProps} />
               </div>
-              <Footer />
+              <footer>
+                <Footer />
+              </footer>
             </PostsProvider>
           </AuthModalProvider>
         </CommunitiesProvider>
