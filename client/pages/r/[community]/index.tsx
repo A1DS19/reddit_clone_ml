@@ -55,7 +55,7 @@ const Community: NextPage<ServerSideResponse> = ({ community, posts, errorMessag
           {isAuth && <CreatePostSubheader selectedCommunity={selectedCommunity!} />}
         </Box>
         <Box>
-          <FilterRelevance selectedCommunity={selectedCommunity!} />
+          <FilterRelevance />
         </Box>
         <Box my={5}>
           <PostIndex selectedCommunity={selectedCommunity!} posts={postsState} />

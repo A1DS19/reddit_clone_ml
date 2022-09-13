@@ -85,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const data = await getAllPostsHome(userId as string);
     posts = data;
   } catch (error: any) {
-    errorMessage = error.response.data.message || '';
+    errorMessage = error?.response?.data?.message || '';
   }
 
   return {

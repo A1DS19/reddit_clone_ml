@@ -10,9 +10,5 @@ interface PostIndexProps {
 }
 
 export const PostIndex: React.FC<PostIndexProps> = ({ posts }) => {
-  return (
-    <Box>
-      <PostList posts={posts} />
-    </Box>
-  );
+  return <PostList posts={posts} />;
 };
