@@ -17,8 +17,9 @@ async function bootstrap() {
       name: 'auth-session',
       keys: [process.env.COOKIE_KEYS],
       maxAge: parseInt(process.env.SESSION_EXPIRATION_TIME),
-      secure: process.env.NODE_ENV === 'development' ? false : false,
+      secure: false,
       httpOnly: false,
+      signed: false,
     }),
   );
   app.useGlobalPipes(new ValidationPipe());
